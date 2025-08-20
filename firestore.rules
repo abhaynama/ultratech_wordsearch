@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /ultratech_wordsearch_results/{docId} {
+      allow read: if true;        // leaderboard visible to all
+      allow create: if request.resource.data.keys().hasAll(['name','score','time','at']) 
+                    && request.resource.data.name is string
+                    && request.resource.data.score is number
+                    && request.resource.data.time is number;
+      allow update, delete: if false;
+    }
+  }
+}
